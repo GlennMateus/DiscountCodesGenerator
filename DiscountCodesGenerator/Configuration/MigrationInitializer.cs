@@ -8,8 +8,9 @@ public static class MigrationInitializer
         var services = scope.ServiceProvider;
         var loggerFactory = services.GetRequiredService<ILoggerFactory>();
         var logger = loggerFactory.CreateLogger("Startup.Migration");
-        var db = services.GetRequiredService<AppDbContext>();
+        var dbContextFactory = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
 
+        using var db = dbContextFactory.CreateDbContext();
         try
         {
             logger.LogInformation("⚙️ Running database migrations...");

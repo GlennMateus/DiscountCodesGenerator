@@ -8,7 +8,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:5001;http://+:5000
-      - ConnectionStrings__SQL=Server=sqlserver;Database=DiscountDb;User=sa;Password=DiscountProject123;Encrypt=False;TrustServerCertificate=True;
+      - ConnectionStrings__SQL=Server=sqlserver;Database=DiscountDb;User=sa;Password=DiscountProject123;Encrypt=False;TrustServerCertificate=True;Max Pool Size=500;
     ports:
       - "5000:5000"
       - "5001:5001"

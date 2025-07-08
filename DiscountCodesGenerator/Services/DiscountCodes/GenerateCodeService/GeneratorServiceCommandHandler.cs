@@ -10,6 +10,8 @@ internal class GeneratorServiceCommandHandler(IDiscountCodeRepository _repositor
     , ILogger<GeneratorServiceCommandHandler> _logger)
     : IRequestHandler<GenerateCodesCommand, GenerateCodesResult>
 {
+    private readonly SemaphoreSlim _dbSemaphore = new(10); // Limit concurrent DB checks
+
     public async Task<GenerateCodesResult> Handle(GenerateCodesCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("🔧 Generating {Count} discount codes...", request.Count);
@@ -19,7 +21,9 @@ internal class GeneratorServiceCommandHandler(IDiscountCodeRepository _repositor
             var parallelismOptions = new ParallelOptions { MaxDegreeOfParallelism = 4, CancellationToken = cancellationToken };
             var generatedCodes = new ConcurrentBag<DiscountCode>();
 
-            await Parallel.ForAsync(0, request.Count, parallelismOptions, async (i, ct) =>
+            await Parallel.ForEachAsync(Enumerable.Range(0, request.Count)
+                , parallelismOptions
+                , async (i, ct) =>
             {
                 generatedCodes.Add(new DiscountCode
                 {
@@ -43,10 +47,19 @@ internal class GeneratorServiceCommandHandler(IDiscountCodeRepository _repositor
     {
         do
         {
+            await _dbSemaphore.WaitAsync(cancellationToken); 
             var code = await Nanoid
                     .GenerateAsync(alphabet: Nanoid.Alphabets.LettersAndDigits, size: length);
-            if (!await _repository.CodeExistsAsync(code, cancellationToken))
-                return code;
+
+            try
+            {
+                if (!await _repository.CodeExistsAsync(code, cancellationToken))
+                    return code;
+            }
+            finally
+            {
+                _dbSemaphore.Release();
+            }
         } while (true);
     }
 }

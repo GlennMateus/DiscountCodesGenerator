@@ -3,7 +3,7 @@
 namespace DiscountCodesGenerator.Services.DiscountCodes.UseDiscountCodeService;
 
 public record UseCodeCommand(string Code) : IRequest<UseCodeResult>;
-public record UseCodeResult(bool success);
+public record UseCodeResult(bool Success);
 
 public class UseDiscountCodeCommandHandler(IDiscountCodeRepository _repository
     , ILogger<UseDiscountCodeCommandHandler> _logger)
@@ -15,15 +15,7 @@ public class UseDiscountCodeCommandHandler(IDiscountCodeRepository _repository
 
         try
         {
-            DiscountCode dbCode = await _repository.GetCodeAsync(request.Code, cancellationToken);
-            if (dbCode != null)
-            {
-                dbCode.TimesUsed++;
-                await _db.SaveChangesAsync(cancellationToken);
-
-                return new UseCodeResult(true);
-            }
-            return new UseCodeResult(false);
+            return new UseCodeResult(await _repository.IncrementCodeUsageAsync(request.Code, cancellationToken));
         }
         catch (Exception ex)
         {

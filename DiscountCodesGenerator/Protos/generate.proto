@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "DiscountCodesGenerator";
+
+package generate;
+
+service Generator {
+	rpc GenerateCodes (GenerateRequest) returns (GenerateResponse);
+}
+
+message GenerateRequest {
+  uint32 count = 1;
+  uint32 length = 2;
+}
+
+message GenerateResponse {
+  repeated string codes = 1;
+}

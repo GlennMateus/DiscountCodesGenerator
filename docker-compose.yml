@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  discountcodesgenerator:
+    build:
+      context: .
+      dockerfile: DiscountCodesGenerator/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:5001;http://+:5000
+      - ConnectionStrings__SQL=Server=sqlserver;Database=DiscountDb;User=sa;Password=DiscountProject123;Encrypt=False;TrustServerCertificate=True;
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    depends_on:
+      - sqlserver
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=DiscountProject123
+    ports:
+      - "1433:1433"

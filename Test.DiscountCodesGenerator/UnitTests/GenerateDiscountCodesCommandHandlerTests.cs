@@ -31,6 +31,8 @@ public class GenerateDiscountCodesCommandHandlerTests
         const int amount = 100;
         var command = new GenerateCodesCommand(amount, 8);
 
+        _mockIdGenerator.Setup(r => r.GenerateAsync(It.IsAny<int>()))
+                .Returns(async (int size) => await Nanoid.GenerateAsync(size: size));
         _mockRepo.Setup(r => r.CodeExistsAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 

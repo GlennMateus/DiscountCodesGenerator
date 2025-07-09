@@ -1,4 +1,5 @@
 ﻿using DiscountCodesGenerator.Repositories.DiscountCodeRespository;
+using DiscountCodesGenerator.Tools.NanoIdGenerator;
 using System.Collections.Concurrent;
 
 namespace DiscountCodesGenerator.Services.DiscountCodes.GenerateCodeService;
@@ -6,8 +7,9 @@ namespace DiscountCodesGenerator.Services.DiscountCodes.GenerateCodeService;
 public record GenerateCodesCommand(ushort Count, byte Length) : IRequest<GenerateCodesResult>;
 public record GenerateCodesResult(IEnumerable<string> Codes);
 
-internal class GeneratorServiceCommandHandler(IDiscountCodeRepository _repository
-    , ILogger<GeneratorServiceCommandHandler> _logger)
+public class GeneratorServiceCommandHandler(IDiscountCodeRepository _repository
+    , ILogger<GeneratorServiceCommandHandler> _logger
+    , IIdGenerator _idGenerator)
     : IRequestHandler<GenerateCodesCommand, GenerateCodesResult>
 {
     private readonly SemaphoreSlim _dbSemaphore = new(10); // Limit concurrent DB checks
@@ -28,7 +30,7 @@ internal class GeneratorServiceCommandHandler(IDiscountCodeRepository _repositor
                 generatedCodes.Add(new DiscountCode
                 {
                     Id = Guid.NewGuid(),
-                    Code = await GenerateDiscountCode(request.Length, cancellationToken)
+                    Code = await GenerateDiscountCode(request.Length, generatedCodes, cancellationToken)
                 });
             });
 
@@ -43,17 +45,18 @@ internal class GeneratorServiceCommandHandler(IDiscountCodeRepository _repositor
         }
     }
 
-    private async Task<string> GenerateDiscountCode(byte length, CancellationToken cancellationToken)
+    private async Task<string> GenerateDiscountCode(byte length, ConcurrentBag<DiscountCode> generatedCodes, CancellationToken cancellationToken)
     {
         do
         {
             await _dbSemaphore.WaitAsync(cancellationToken); 
-            var code = await Nanoid
-                    .GenerateAsync(alphabet: Nanoid.Alphabets.LettersAndDigits, size: length);
+            var code = await _idGenerator
+                    .GenerateAsync(size: length);
 
             try
             {
-                if (!await _repository.CodeExistsAsync(code, cancellationToken))
+                if (!await _repository.CodeExistsAsync(code, cancellationToken)
+                    && !generatedCodes.Select(c=>c.Code).Contains(code))
                     return code;
             }
             finally

@@ -1,4 +1,5 @@
 ﻿using DiscountCodesGenerator.Repositories.DiscountCodeRespository;
+using DiscountCodesGenerator.Tools.NanoIdGenerator;
 
 namespace DiscountCodesGenerator.Configuration;
 
@@ -6,15 +7,13 @@ public static class ServicesConfiguration
 {
     public static void AddProjectServices(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.AddDbContext<AppDbContext>(options =>
-        //    options.UseSqlServer(configuration.GetConnectionString("SQL")));
-
         services.AddPooledDbContextFactory<AppDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("SQL"));
         });
 
         services.AddScoped<IDiscountCodeRepository, DiscountCodeRepository>();
+        services.AddSingleton<IIdGenerator, IdGenerator>();
 
         services.AddMediatR(config =>
         {

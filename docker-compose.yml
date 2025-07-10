@@ -1,6 +1,19 @@
 version: '3.4'
 
 services:
+  webdiscountgenerator:
+    build:
+      context: .
+      dockerfile: Web.DiscountCodesGenerator/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:6001;http://+:6000
+    ports:
+      - "6000:6000"
+      - "6001:6001"
+    depends_on:
+      - discountcodesgenerator
+
   discountcodesgenerator:
     build:
       context: .

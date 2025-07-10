@@ -9,6 +9,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test.DiscountCodesGenerator", "Test.DiscountCodesGenerator\Test.DiscountCodesGenerator.csproj", "{BFB29E14-B878-41E3-B8AE-124CA220AFBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.DiscountCodesGenerator", "Web.DiscountCodesGenerator\Web.DiscountCodesGenerator.csproj", "{B7066A5A-FAB9-46EF-B34D-55F67D0E5CDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{BFB29E14-B878-41E3-B8AE-124CA220AFBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BFB29E14-B878-41E3-B8AE-124CA220AFBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BFB29E14-B878-41E3-B8AE-124CA220AFBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7066A5A-FAB9-46EF-B34D-55F67D0E5CDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7066A5A-FAB9-46EF-B34D-55F67D0E5CDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7066A5A-FAB9-46EF-B34D-55F67D0E5CDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7066A5A-FAB9-46EF-B34D-55F67D0E5CDC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

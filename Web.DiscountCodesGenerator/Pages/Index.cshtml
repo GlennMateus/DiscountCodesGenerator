@@ -1,0 +1,37 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+
+    <div class="text-center">
+        <h1 class="display-4">Welcome to discount code generator</h1>
+    </div>
+
+    <div class="row">
+        <form class="row row-cols-lg-auto g-3 align-items-center" method="post">
+            @Html.AntiForgeryToken()
+            <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Count</label>
+            <div class="col-12">
+                <input class="form-control" type="number" name="count" asp-for="Count" />
+            </div>
+            <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Length</label>
+            <div class="col-12">
+                <input class="form-control" type="number" name="length" asp-for="Length" />
+            </div>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit" asp-page-handler="Generate">Generate Codes</button>
+            </div>
+        </form>
+    </div>
+
+    if (Model.ShowResult)
+    {
+        <div class="row">
+            <pre>
+                <code class="language-json">
+                 @Model.GeneratedCodes
+                </code>
+            </pre>
+        </div>
+    }
+}

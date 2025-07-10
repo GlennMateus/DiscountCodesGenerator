@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+
+service CodeConsumerService {
+	rpc ConsumeCode (ConsumeCodeRequest) returns (ConsumeCodeResponse);
+}
+
+message ConsumeCodeRequest {
+  string code = 1;
+}
+
+message ConsumeCodeResponse {
+  bool success = 1;
+}

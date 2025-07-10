@@ -34,7 +34,7 @@ docker-compose up --build
 
 #### 3. Access the Web UI
 
-## Open your browser at https://localhost:6001
+Open your browser at https://localhost:6001
 
 ### ✅ Option 2: Run Manually VS2022
 
@@ -60,3 +60,25 @@ git clone https://github.com/GlennMateus/DiscountCodesGenerator.git
 
 Right click in the docker-compose > Compose Up, and wait until the end of the process
 <img src="https://raw.githubusercontent.com/GlennMateus/DiscountCodesGenerator/refs/heads/master/docs/images/docker-compose-up.png"/>
+
+If everything work as expected, you should be able to watch the list of the images in your Docker desktop.
+<img src="https://raw.githubusercontent.com/GlennMateus/DiscountCodesGenerator/refs/heads/master/docs/images/docker-desktop-listing.png"/>
+
+#### 5. Access your Web UI
+
+## Open your browser at https://localhost:6001
+
+### 🚀 Postman Setup
+
+#### 1. Open your Postman
+
+#### 2. Configure a new collection
+
+#### 3. Add a new gRPC request
+
+<img src="https://raw.githubusercontent.com/GlennMateus/DiscountCodesGenerator/refs/heads/master/docs/images/postman-new-grpc-request.png"/>
+
+#### 4. Generate Codes request
+
+    1. Add the URL grpc://localhost:5001
+    2.

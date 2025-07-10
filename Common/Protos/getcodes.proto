@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "DiscountCodesGenerator";
+
+package getcodes;
+
+service GetCodesService {
+	rpc GetCodes (google.protobuf.Empty) returns (GetCodesResponse);
+}
+
+message GetCodesResponse {
+  repeated string codes = 1;
+}

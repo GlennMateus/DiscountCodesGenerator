@@ -1,6 +1,5 @@
 ﻿
 using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace DiscountCodesGenerator.Repositories.DiscountCodeRespository;
@@ -54,6 +53,16 @@ public class DiscountCodeRepository(IConfiguration configuration
             .DiscountCodes
             .AsNoTracking()
             .AnyAsync(x => x.Code == code, cancellationToken);
+    }
+
+    public async Task<IEnumerable<DiscountCode>> GetCodesAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("⚙️ Retrieving discount codes...");
+        await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
+
+        return await dbContext
+            .DiscountCodes
+            .ToListAsync();
     }
 
     public async Task<bool> IncrementCodeUsageAsync(string code, CancellationToken cancellationToken)

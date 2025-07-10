@@ -9,11 +9,12 @@
 
     <div class="row">
         <form class="row row-cols-lg-auto g-3 align-items-center" method="post">
-            @Html.AntiForgeryToken()
+            <div asp-validation-summary="All" class="text-danger"></div>
             <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Count</label>
             <div class="col-12">
                 <input class="form-control" type="number" name="count" asp-for="Count" />
             </div>
+            <span asp-validation-for="Count" class="text-danger"></span>
             <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Length</label>
             <div class="col-12">
                 <input class="form-control" type="number" name="length" asp-for="Length" />
@@ -21,6 +22,7 @@
             <div class="col-12">
                 <button class="btn btn-primary" type="submit" asp-page-handler="Generate">Generate Codes</button>
             </div>
+            <span asp-validation-for="Length" class="text-danger"></span>
         </form>
     </div>
 
@@ -28,10 +30,11 @@
     {
         <div class="row">
             <pre>
-                <code class="language-json">
-                 @Model.GeneratedCodes
-                </code>
+                <code class="language-json">@Model.GeneratedCodes</code>
             </pre>
         </div>
     }
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

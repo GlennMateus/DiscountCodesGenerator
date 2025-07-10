@@ -1,7 +1,10 @@
 syntax = "proto3";
 
+option csharp_namespace = "DiscountCodesGenerator";
 
-service CodeConsumer {
+package consumecode;
+
+service ConsumeCodeService {
 	rpc ConsumeCode (ConsumeCodeRequest) returns (ConsumeCodeResponse);
 }
 

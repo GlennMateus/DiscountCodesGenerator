@@ -1,6 +1,6 @@
 ﻿namespace DiscountCodesGenerator.Services.DiscountCodes.UseDiscountCodeService;
 
-public class UseDiscountCodeService(IMediator sender) : CodeConsumer.CodeConsumerBase
+public class UseDiscountCodeService(IMediator sender) : ConsumeCodeService.ConsumeCodeServiceBase
 {
     public override async Task<ConsumeCodeResponse> ConsumeCode(ConsumeCodeRequest request,
         ServerCallContext context)

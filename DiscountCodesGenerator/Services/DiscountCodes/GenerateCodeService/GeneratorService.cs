@@ -1,7 +1,7 @@
 ﻿namespace DiscountCodesGenerator.Services.DiscountCodes.GenerateCodeService;
 
 public class GeneratorService(IMediator sender)
-    : Generator.GeneratorBase
+    : GenerateCodesService.GenerateCodesServiceBase
 {
 
     public override async Task<GenerateResponse> GenerateCodes(GenerateRequest request

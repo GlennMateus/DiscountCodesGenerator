@@ -37,7 +37,14 @@ public class IndexModel : PageModel
         var response = await _grpcClient.GenerateCodesAsync(AddCodes.Count, AddCodes.Length);
         if (response.Codes.Any())
         {
+            TempData["ToastMessage"] = "Codes created successfully";
+            TempData["ToastType"] = "success";
             await LoadCodes();
+        }
+        else
+        {
+            TempData["ToastMessage"] = "Something went wrong...";
+            TempData["ToastType"] = "error";
         }
         return Page();
     }

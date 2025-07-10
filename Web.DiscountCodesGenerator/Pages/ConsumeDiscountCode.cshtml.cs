@@ -35,8 +35,15 @@ namespace Web.DiscountCodesGenerator.Pages
             var response = await _grpcClient.ConsumeCodeAsync(ConsumeCode.Code);
             if (response.Success)
             {
-                await LoadCodes();
+                TempData["ToastMessage"] = "Code consumed successfully";
+                TempData["ToastType"] = "success";
             }
+            else
+            {
+                TempData["ToastMessage"] = "Something went wrong...";
+                TempData["ToastType"] = "error";
+            }
+            await LoadCodes();
             return Page();
         }
 

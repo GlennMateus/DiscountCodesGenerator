@@ -49,3 +49,5 @@ git clone https://github.com/GlennMateus/DiscountCodesGenerator.git
 #### 3. Set docker-compose as the Startup
 
 ##### 1. Option 1: Set it at the top menu in your IDE
+
+<img src="https://raw.githubusercontent.com/GlennMateus/DiscountCodesGenerator/refs/heads/master/docs/images/docker-compose-opt-1.png"/>

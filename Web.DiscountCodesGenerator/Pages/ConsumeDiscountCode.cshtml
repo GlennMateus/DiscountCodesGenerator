@@ -1,15 +1,9 @@
 ﻿@page
-@model Web.DiscountCodesGenerator.Pages.IndexModel
+@model Web.DiscountCodesGenerator.Pages.ConsumeDiscountCodeModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Consume code";
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome to discount code generator</h1>
-    </div>
-
-    <hr />
-
-    <partial name="_IndexAddCodesPartial" model="Model.AddCodes" />
+    <partial name="_IndexConsumeCodePartial" model="Model.ConsumeCode" />
 
     <hr />
     if (Model.ShowResult)

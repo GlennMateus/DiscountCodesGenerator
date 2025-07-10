@@ -1,0 +1,23 @@
+﻿@model Web.DiscountCodesGenerator.Models.AddCodesModel
+
+<div class="row">
+    <h3>Add discount codes</h3>
+    <form class="row row-cols-lg-auto g-3 align-items-center" method="post" asp-page-handler="Generate">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <label class="col-sm-2 col-form-label col-form-label-sm">Count</label>
+        <div class="col-12">
+            <input class="form-control" type="number" asp-for="Count" />
+            <span asp-validation-for="Count" class="text-danger"></span>
+        </div>
+
+        <label class="col-sm-2 col-form-label col-form-label-sm">Length</label>
+        <div class="col-12">
+            <input class="form-control" type="number" asp-for="Length" />
+            <span asp-validation-for="Length" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">Generate Codes</button>
+        </div>
+    </form>
+</div>

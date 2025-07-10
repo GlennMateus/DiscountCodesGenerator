@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-service DiscountGeneratorService {
+service Generator {
 	rpc GenerateCodes (GenerateRequest) returns (GenerateResponse);
 }
 

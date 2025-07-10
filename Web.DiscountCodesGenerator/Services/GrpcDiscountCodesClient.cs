@@ -1,27 +1,52 @@
-﻿using Grpc.Net.Client;
+﻿using Grpc.Core;
+using Grpc.Net.Client;
 
 namespace Web.DiscountCodesGenerator.Services;
 
 public class GrpcDiscountCodesClient(IConfiguration _configuration)
 {
-    public async Task<GenerateResponse> GenerateCodes(short count, byte length)
+    public async Task<GenerateResponse> GenerateCodes(uint count, uint length)
     {
-        using var channel = GrpcChannel.ForAddress(_configuration["GrpcServerUrl"]);
-        var client = new DiscountGeneratorService.DiscountGeneratorServiceClient(channel);
-        var request = new GenerateRequest { 
-            Count = Convert.ToUInt32(count),
-            Length = length 
-        };
+        try
+        {
+            using var channel = GrpcChannel.ForAddress(
+                _configuration["GrpcServerUrl"]
+                , new GrpcChannelOptions
+                {
+                    HttpHandler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    }
+                });
+            var client = new Generator.GeneratorClient(channel);
+            var request = new GenerateRequest
+            {
+                Count = count,
+                Length = length
+            };
 
-        var response = await client.GenerateCodesAsync(request);
+            var response = await client.GenerateCodesAsync(request);
 
-        return response;
+            return response;
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 
     public async Task<ConsumeCodeResponse> ConsumeCode(string code)
     {
-        using var channel = GrpcChannel.ForAddress(_configuration["GrpcServerUrl"]);
-        var client = new CodeConsumerService.CodeConsumerServiceClient(channel);
+        using var channel = GrpcChannel.ForAddress(
+            _configuration["GrpcServerUrl"]
+            , new GrpcChannelOptions
+            {
+                HttpHandler = new HttpClientHandler
+                {
+                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                }
+            });
+        var client = new CodeConsumer.CodeConsumerClient(channel);
         var request = new ConsumeCodeRequest
         {
             Code = code

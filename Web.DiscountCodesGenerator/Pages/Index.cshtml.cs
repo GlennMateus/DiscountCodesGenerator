@@ -12,7 +12,7 @@ public class IndexModel : PageModel
     [BindProperty]
     [Required(ErrorMessage = "Count value is required.")]
     [Range(1, 2000, ErrorMessage = "Value must be between 1 and 2000.")]
-    public short Count { get; set; }
+    public uint Count { get; set; }
 
     [BindProperty]
     [Required(ErrorMessage = "Length value is required")]

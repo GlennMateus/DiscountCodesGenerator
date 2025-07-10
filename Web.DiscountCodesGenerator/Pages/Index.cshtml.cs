@@ -2,14 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using Web.DiscountCodesGenerator.Services;
 
 namespace Web.DiscountCodesGenerator.Pages;
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
-    private readonly GrpcDiscountCodesClient _grpcClient;
+    private readonly IGrpcDiscountCodesClient _grpcClient;
 
     [BindProperty]
     [Required(ErrorMessage = "Count value is required.")]
@@ -25,15 +24,24 @@ public class IndexModel : PageModel
     
     public string GeneratedCodes { get; set; }
 
-    public IndexModel(ILogger<IndexModel> logger, GrpcDiscountCodesClient grpcClient)
+    public IndexModel(ILogger<IndexModel> logger, IGrpcDiscountCodesClient grpcClient)
     {
         _logger = logger;
         _grpcClient = grpcClient;
     }
 
-    public void OnGet()
+    public async Task<IActionResult> OnGet()
     {
-
+        var getCodesResponse = await _grpcClient.GetDiscountCodesAsync();
+        if (getCodesResponse.Codes.Any())
+        {
+            ShowResult = true;
+            GeneratedCodes = JsonSerializer.Serialize(getCodesResponse, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+        }
+        return Page();
     }
 
     [IgnoreAntiforgeryToken]
@@ -44,7 +52,7 @@ public class IndexModel : PageModel
             ShowResult = false;
             return Page();
         }
-        var response = await _grpcClient.GenerateCodes(Count, Length);
+        var response = await _grpcClient.GenerateCodesAsync(Count, Length);
         if (response.Codes.Any())
         {
             ShowResult = true;

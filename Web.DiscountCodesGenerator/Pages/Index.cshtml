@@ -25,10 +25,11 @@
             <span asp-validation-for="Length" class="text-danger"></span>
         </form>
     </div>
-
+    <hr />
     if (Model.ShowResult)
     {
         <div class="row">
+            <h2>✅ Existing/ Added discount codes</h2>
             <pre>
                 <code class="language-json">@Model.GeneratedCodes</code>
             </pre>

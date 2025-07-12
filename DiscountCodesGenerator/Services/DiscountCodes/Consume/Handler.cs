@@ -1,5 +1,4 @@
-﻿using DiscountCodesGenerator.Repositories.DiscountCodeRespository;
-
+﻿
 namespace DiscountCodesGenerator.Services.DiscountCodes.Consume;
 
 public class Handler(IDiscountCodeRepository _repository

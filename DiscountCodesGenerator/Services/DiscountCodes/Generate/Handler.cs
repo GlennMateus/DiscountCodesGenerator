@@ -1,5 +1,4 @@
-﻿using DiscountCodesGenerator.Repositories.DiscountCodeRespository;
-using DiscountCodesGenerator.Tools.NanoIdGenerator;
+﻿using DiscountCodesGenerator.Tools.NanoIdGenerator;
 using System.Collections.Concurrent;
 
 namespace DiscountCodesGenerator.Services.DiscountCodes.Generate;

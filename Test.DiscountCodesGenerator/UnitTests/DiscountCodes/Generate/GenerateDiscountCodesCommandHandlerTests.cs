@@ -1,6 +1,6 @@
 ﻿
 using DiscountCodesGenerator.Repositories.DiscountCodeRespository;
-using DiscountCodesGenerator.Services.DiscountCodes.GenerateCodeService;
+using DiscountCodesGenerator.Services.DiscountCodes.Generate;
 using DiscountCodesGenerator.Tools.NanoIdGenerator;
 using FluentAssertions;
 using MapsterMapper;
@@ -9,19 +9,19 @@ using Moq;
 using NanoidDotNet;
 using System.Collections.Concurrent;
 
-namespace Test.DiscountCodesGenerator.UnitTests;
+namespace Test.DiscountCodesGenerator.UnitTests.DiscountCodes.Generate;
 
 public class GenerateDiscountCodesCommandHandlerTests
 {
     private readonly Mock<IDiscountCodeRepository> _mockRepo = new();
     private readonly Mock<IMapper> _mockMapper = new();
-    private readonly Mock<ILogger<GeneratorServiceCommandHandler>> _mockLogger = new();
+    private readonly Mock<ILogger<Handler>> _mockLogger = new();
     private readonly Mock<IIdGenerator> _mockIdGenerator = new();
-    private readonly GeneratorServiceCommandHandler _handler;
+    private readonly Handler _handler;
 
     public GenerateDiscountCodesCommandHandlerTests()
     {
-        _handler = new GeneratorServiceCommandHandler(_mockRepo.Object, _mockLogger.Object, _mockIdGenerator.Object);
+        _handler = new Handler(_mockRepo.Object, _mockLogger.Object, _mockIdGenerator.Object);
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public class GenerateDiscountCodesCommandHandlerTests
     {
         // Arrange
         const int amount = 100;
-        var command = new GenerateCodesCommand(amount, 8);
+        var command = new Command(amount, 8);
 
         _mockIdGenerator.Setup(r => r.GenerateAsync(It.IsAny<int>()))
                 .Returns(async (int size) => await Nanoid.GenerateAsync(size: size));
@@ -50,7 +50,7 @@ public class GenerateDiscountCodesCommandHandlerTests
     public async Task ShouldRetryCodeGenerationWhenItIsDuplicate()
     {
         // Arrange
-        var command = new GenerateCodesCommand(1, 8);
+        var command = new Command(1, 8);
         var duplicateCode = "DUPLICATE";
         var validCode = "VALIDCODE";
         var callCount = 0;
@@ -84,7 +84,7 @@ public class GenerateDiscountCodesCommandHandlerTests
     {
         // Arrange
         const int amount = 1000;
-        var command = new GenerateCodesCommand(amount, 8);
+        var command = new Command(amount, 8);
         var generatedCodes = new ConcurrentBag<string>();
         var semaphore = new SemaphoreSlim(1, 1);
 

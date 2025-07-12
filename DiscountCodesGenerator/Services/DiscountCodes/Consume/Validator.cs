@@ -1,8 +1,8 @@
-﻿namespace DiscountCodesGenerator.Services.DiscountCodes.UseDiscountCodeService;
+﻿namespace DiscountCodesGenerator.Services.DiscountCodes.Consume;
 
-public class UseDiscountCodeServiceValidator : AbstractValidator<UseCodeCommand>
+public class Validator : AbstractValidator<Command>
 {
-    public UseDiscountCodeServiceValidator()
+    public Validator()
     {
         RuleFor(c => c.Code)
             .NotEmpty()

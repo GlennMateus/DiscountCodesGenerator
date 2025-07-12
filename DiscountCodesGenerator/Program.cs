@@ -1,7 +1,7 @@
 // builder configuration
-using DiscountCodesGenerator.Services.DiscountCodes.GenerateCodeService;
-using DiscountCodesGenerator.Services.DiscountCodes.GetDiscountCodesService;
-using DiscountCodesGenerator.Services.DiscountCodes.UseDiscountCodeService;
+using DiscountCodesGenerator.Services.DiscountCodes.Generate;
+using DiscountCodesGenerator.Services.DiscountCodes.Get;
+using DiscountCodesGenerator.Services.DiscountCodes.Consume;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddProjectServices(builder.Configuration);
@@ -16,8 +16,8 @@ app.ApplyMigrations();
 
 // Initialize gRPC services
 app.MapGrpcService<GeneratorService>();
-app.MapGrpcService<UseDiscountCodeService>();
-app.MapGrpcService<GetDiscountCodesService>();
+app.MapGrpcService<DiscountCodesGenerator.Services.DiscountCodes.Consume.Endpoint>();
+app.MapGrpcService<DiscountCodesGenerator.Services.DiscountCodes.Get.Endpoint>();
 app.MapGet("/", () => "Service not available for HTTP requests.");
 
 // Enable gRPC reflection for non-prod environments

@@ -1,8 +1,8 @@
-﻿namespace DiscountCodesGenerator.Services.DiscountCodes.GenerateCodeService;
+﻿namespace DiscountCodesGenerator.Services.DiscountCodes.Generate;
 
-public class GeneratorServiceValidator : AbstractValidator<GenerateCodesCommand>
+public class Validator : AbstractValidator<Command>
 {
-    public GeneratorServiceValidator()
+    public Validator()
     {
         RuleFor(c => c.Length)
             .InclusiveBetween((byte)7, (byte)8)

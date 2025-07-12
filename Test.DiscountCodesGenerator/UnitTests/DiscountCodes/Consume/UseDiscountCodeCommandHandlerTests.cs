@@ -1,19 +1,19 @@
 ﻿using DiscountCodesGenerator.Repositories.DiscountCodeRespository;
-using DiscountCodesGenerator.Services.DiscountCodes.UseDiscountCodeService;
+using DiscountCodesGenerator.Services.DiscountCodes.Consume;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace Test.DiscountCodesGenerator.UnitTests;
+namespace Test.DiscountCodesGenerator.UnitTests.DiscountCodes.Consume;
 public class UseDiscountCodeCommandHandlerTests
 {
     private readonly Mock<IDiscountCodeRepository> _mockRepo = new();
-    private readonly Mock<ILogger<UseDiscountCodeCommandHandler>> _mockLogger = new();
-    private readonly UseDiscountCodeCommandHandler _handler;
+    private readonly Mock<ILogger<Handler>> _mockLogger = new();
+    private readonly Handler _handler;
 
     public UseDiscountCodeCommandHandlerTests()
     {
-        _handler = new UseDiscountCodeCommandHandler(_mockRepo.Object, _mockLogger.Object);
+        _handler = new Handler(_mockRepo.Object, _mockLogger.Object);
     }
 
     [Fact]
@@ -24,7 +24,7 @@ public class UseDiscountCodeCommandHandlerTests
         _mockRepo.Setup(r => r.IncrementCodeUsageAsync(code, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(true);
 
-        var command = new UseCodeCommand(code);
+        var command = new Command(code);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -44,7 +44,7 @@ public class UseDiscountCodeCommandHandlerTests
         _mockRepo.Setup(r => r.IncrementCodeUsageAsync(code, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(false);
 
-        var command = new UseCodeCommand(code);
+        var command = new Command(code);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -67,7 +67,7 @@ public class UseDiscountCodeCommandHandlerTests
         _mockRepo.Setup(r => r.IncrementCodeUsageAsync(code, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => Interlocked.Increment(ref counter) == 1);
 
-        var command = new UseCodeCommand(code);
+        var command = new Command(code);
 
         // Act
         var tasks = Enumerable.Range(0, parallelRequests)

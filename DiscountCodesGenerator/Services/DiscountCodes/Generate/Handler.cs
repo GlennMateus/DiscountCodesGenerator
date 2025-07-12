@@ -2,19 +2,17 @@
 using DiscountCodesGenerator.Tools.NanoIdGenerator;
 using System.Collections.Concurrent;
 
-namespace DiscountCodesGenerator.Services.DiscountCodes.GenerateCodeService;
+namespace DiscountCodesGenerator.Services.DiscountCodes.Generate;
 
-public record GenerateCodesCommand(ushort Count, byte Length) : IRequest<GenerateCodesResult>;
-public record GenerateCodesResult(IEnumerable<string> Codes);
 
-public class GeneratorServiceCommandHandler(IDiscountCodeRepository _repository
-    , ILogger<GeneratorServiceCommandHandler> _logger
+public class Handler(IDiscountCodeRepository _repository
+    , ILogger<Handler> _logger
     , IIdGenerator _idGenerator)
-    : IRequestHandler<GenerateCodesCommand, GenerateCodesResult>
+    : IRequestHandler<Command, Result>
 {
     private readonly SemaphoreSlim _dbSemaphore = new(10); // Limit concurrent DB checks
 
-    public async Task<GenerateCodesResult> Handle(GenerateCodesCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(Command request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("🔧 Generating {Count} discount codes...", request.Count);
 
@@ -36,7 +34,7 @@ public class GeneratorServiceCommandHandler(IDiscountCodeRepository _repository
 
             await _repository.BulkInsertAsync(generatedCodes, cancellationToken);
 
-            return new GenerateCodesResult(generatedCodes.Select(c => c.Code));
+            return new Result(generatedCodes.Select(c => c.Code));
         }
         catch (Exception ex)
         {
